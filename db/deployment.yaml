@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siteconsultas-db
+  labels:
+    app: siteconsultas-db
+spec:
+  selector:
+    matchLabels:
+      app: siteconsultas-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: siteconsultas-db
+    spec:
+      containers:
+      - name: siteconsultas-db
+        image: mysql:5.7
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 3306
+        env:
+          - name: MYSQL_ROOT_PASSWORD 
+            valueFrom:
+              secretKeyRef:
+                name: siteconsultas-db-secret
+                key: password
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        volumeMounts:
+          - name: siteconsultas-persistent-storage
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: siteconsultas-persistent-storage
+          persistentVolumeClaim:
+            claimName: siteconsultas-pv-claim

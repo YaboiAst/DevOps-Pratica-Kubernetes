@@ -1,0 +1,21 @@
+services:
+   db:
+    image: mysql
+    env_file:
+      - .env
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+   siteconsultas:
+    image: dsw1/site-consultas
+    restart: always
+    ports:
+      - "80:8080"
+    env_file:
+      - .env
+      - DSW-ReqB/.env
+    depends_on:
+      - db
+
+volumes:
+  mysql-data:

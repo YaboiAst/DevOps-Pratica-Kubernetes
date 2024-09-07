@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siteconsultas
+  labels:
+    app: siteconsultas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siteconsultas
+  template:
+    metadata:
+      labels:
+        app: siteconsultas
+    spec:
+      containers:
+        - name: siteconsultas
+          image: dsw1/site-consultas:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: siteconsultas-db-configmap
+                  key: database_url
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: siteconsultas-db-secret
+                  key: username
+            - name: MYSQL_PASSWORD 
+              valueFrom:
+                secretKeyRef:
+                  name: siteconsultas-db-secret
+                  key: password
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
