@@ -30,3 +30,4 @@ chmod +x k_down/sh
 # Finalizar
 ./k_down.sh
 ```
+Para acessar o site, acesse o site pelo endereço: siteconsultas.k8s.local 
